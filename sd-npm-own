@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+package=$1
+shift || { echo 'Usage: sd-npm-own <package>' >&2; exit 1; }
+
+curl -s 'https://www.npmjs.com/package/sassdoc' \
+  | sed -n '/<ul class="humans">/,/<\/ul>/{/<a href="\/~/{s/.*~//;s/".*//;p}}' \
+  | xargs -I{} npm owner add {} "$package"
